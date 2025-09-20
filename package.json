@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "just for practicing and mastering backend concepts and datebase(mongodb)",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javascript",
     "backend"
   ],
   "author": "Shubham Yadav",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
 }
