@@ -4,3 +4,13 @@ const asyncHandler =  (requestHandler) => {
         ((err) => next(err))
     }
 }
+
+
+
+
+
+if (
+    [fullName,username,password,email].some((field)=> field?.trim() === "")
+) {
+    
+}
