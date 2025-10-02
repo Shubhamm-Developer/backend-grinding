@@ -72,16 +72,17 @@ const {email, username , password, fullname } = req.body
         throw new ApiError(400 , "failed to upload avatar image on cloudinary !! ")
         
     }
+const user = new User({
+    fullname,
+    avatar: avatar.url,
+    coverImage : coverImage?.url || "",
+    email,
+    password,
+    username: username.toLowerCase()
+});
 
-    const user = await User.create({
-        fullname,
-        avatar: avatar.url,
-        coverImage : coverImage?.url || "",
-        email,
-        password,
-        username: username.toLowerCase()
+await user.save();
 
-    })
 
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
@@ -107,6 +108,8 @@ const loginUser = asyncHandler(async (req, res)  => {
     // access and refresh token generate krne padenge 
     // send tokens through cookies
     const{email , username , password } = req.body
+    console.log(req.body);
+    
 
     if ( !(username || email) ) {
          throw new ApiError ( 400 , "username or email is required")
