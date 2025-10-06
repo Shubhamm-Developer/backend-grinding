@@ -108,7 +108,7 @@ const loginUser = asyncHandler(async (req, res)  => {
     // access and refresh token generate krne padenge 
     // send tokens through cookies
     const{email , username , password } = req.body
-    console.log(req.body);
+    // console.log(req.body);
     
 
     if ( !(username || email) ) {
@@ -157,8 +157,8 @@ const logoutUser = asyncHandler(async (req , res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set:{
-                refreshToken : undefined
+            $unset:{
+                refreshToken : 1
 
             }
         },
@@ -187,6 +187,7 @@ const logoutUser = asyncHandler(async (req , res) => {
 const refreshAccessToken = asyncHandler(async (req,res)=> {
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
+// console.log(incomingRefreshToken);
 
     if (!incomingRefreshToken) {
         throw new ApiError(401 , "unauthorized request ")
@@ -200,8 +201,7 @@ const refreshAccessToken = asyncHandler(async (req,res)=> {
  
      )
  
-     const user = await User.findById(decodedToken?.REFRESH_TOKEN_SECRET)
- 
+     const user = await User.findById(decodedToken?._id)
  
      if (!user) {
          throw new ApiError(401 , "invalid refresh token ")
@@ -222,7 +222,7 @@ const refreshAccessToken = asyncHandler(async (req,res)=> {
      return res
      .status(200)
      .cookie("accessToken",accessToken, options)
-     .cookie("refrestToken", newRefreshToken, options)
+     .cookie("refreshToken", newRefreshToken, options)
      .json(
          new ApiResponse(
              200,
@@ -231,14 +231,14 @@ const refreshAccessToken = asyncHandler(async (req,res)=> {
          )
      )
    } catch (error) {
-    throw new ApiError(401 , error?.message || " invalid refresh token")
+    throw new ApiError(401 ," invalid refresh token")
    }
     
    });
 
 const changeCurrentPassword = asyncHandler(async(req,res)  => {
 
-    const {oldPassword , newPassowrd} = req.body
+    const {oldPassword , newPassword} = req.body
 
     const user = await User.findById(req.user?._id)
     const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
@@ -249,7 +249,7 @@ const changeCurrentPassword = asyncHandler(async(req,res)  => {
         
     }
 
-    user.password = newPassowrd
+    user.password = newPassword
     await user.save({validateBeforeSave:false})
 
     return res
@@ -262,7 +262,7 @@ const changeCurrentPassword = asyncHandler(async(req,res)  => {
 const getCurrentUser = asyncHandler(async(req,res) =>{
     return res
     .status(200)
-    .json(200, req.user, "current user fetched successfully")
+    .json( new ApiResponse(200, req.user, "current user fetched successfully"))
     })
 
 
