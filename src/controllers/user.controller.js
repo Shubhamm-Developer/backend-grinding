@@ -271,7 +271,6 @@ const updateAccountDetails = asyncHandler(async(req,res)=> {
 
     if (!fullname && !email) {
         throw new ApiError (400 ,"both fields are required")
-        
     }
 
     const user = User.findByIdAndUpdate(
