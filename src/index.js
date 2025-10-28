@@ -15,7 +15,13 @@ connectDB()
         console.log(`server is running on port : ${process.env.PORT}`);
         
     })
+
 })
+.catch((error) => {
+  console.error("failed to start the server ", error);
+  process.exit(1);
+
+});
 // import express from "express"
 // const app = express()
 
