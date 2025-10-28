@@ -37,3 +37,14 @@ if (
             }
 
             // why just subscriptions was in plural ?
+            // Wrapper to convert callback to promise
+const promisify = (fn) => {
+    return (...args) => {
+        return new Promise((resolve, reject) => {
+            fn(...args, (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            });
+        });
+    };
+};
